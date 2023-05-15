@@ -13,3 +13,8 @@ MonoBehaviour:
   m_Name: Question_2
   m_EditorClassIdentifier: 
   question: What is the first enemy that you see in the game?
+  answerArray:
+  - A furry Rat
+  - A scaly Crocodile
+  - An ugly Earthworm
+  correctIndex: 0
