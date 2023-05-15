@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: faedf811484072f46a7913d5dfa95ec0, type: 3}
-  m_Name: Question_3
+  m_Name: Question_15
   m_EditorClassIdentifier: 
-  question: What is the name of the Pirate themed area of the island?
+  question: Excluding the boss, how many levels are there in the Gangplank Galleon
+    area of the island?
   answerArray:
-  - Gangway Garbage
-  - Gangland Galleon
-  - Gangplank Galleon
-  correctIndex: 2
+  - 5
+  - 6
+  - 4
+  correctIndex: 0

@@ -8,7 +8,8 @@ public class Quiz : MonoBehaviour
 {
     [Header("Questions")]
     [SerializeField] private TextMeshProUGUI questionText;
-   [SerializeField] private QuestionSO question;
+    [SerializeField] private List<QuestionSO> questionsList = new List<QuestionSO>();
+   private QuestionSO currentQuestion;
 
     [Header("Answers")]
    [SerializeField] private GameObject[] answerButtons;
@@ -25,7 +26,7 @@ public class Quiz : MonoBehaviour
     void Start()
     {
         timer = FindObjectOfType<Timer>();
-        DisplayQuestion();
+       
        
     }
 
@@ -59,13 +60,13 @@ public class Quiz : MonoBehaviour
     {
         Image buttonImage;
 
-        if (index == question.GetCorrectIndex()){
+        if (index == currentQuestion.GetCorrectIndex()){
             questionText.text = "Correct!";
             buttonImage = answerButtons[index].GetComponent<Image>();
             buttonImage.sprite = correctAnswerSprite;
         } else {
-            int correctIndex = question.GetCorrectIndex();
-            string correctAnswer = question.GetAnswer(correctIndex);
+            int correctIndex = currentQuestion.GetCorrectIndex();
+            string correctAnswer = currentQuestion.GetAnswer(correctIndex);
             questionText.text = "Incorrect! The Correct Answer Was:\n" + correctAnswer;
             buttonImage = answerButtons[correctIndex].GetComponent<Image>();
             buttonImage.sprite = correctAnswerSprite;
@@ -73,22 +74,37 @@ public class Quiz : MonoBehaviour
     }
 
     private void DisplayQuestion(){
-        questionText.text = question.GetQuestion();
+        questionText.text = currentQuestion.GetQuestion();
 
         for (int i = 0; i < answerButtons.Length; i++)
         {
         TextMeshProUGUI buttonText = answerButtons[i].GetComponentInChildren<TextMeshProUGUI>();
-        buttonText.text = question.GetAnswer(i);            
+        buttonText.text = currentQuestion.GetAnswer(i);            
         } 
     }
 
     private void GetNextQuestion()
     {
-        ToggleButtonState(true);
-        SetDefaultButtonSprite();
-        DisplayQuestion();
+        if(questionsList.Count >= 1)
+        {
+            ToggleButtonState(true);
+            SetDefaultButtonSprite();
+            GetRandomQuestion();
+            DisplayQuestion();
+        }
 
     }
+
+    private void GetRandomQuestion()
+    {
+        int index = Random.Range(0, questionsList.Count);
+        currentQuestion = questionsList[index];
+        if(questionsList.Contains(currentQuestion))
+        {
+          questionsList.Remove(currentQuestion);
+        }
+    }
+    
 
     private void ToggleButtonState (bool state){
         Button button;

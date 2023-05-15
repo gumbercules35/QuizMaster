@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: faedf811484072f46a7913d5dfa95ec0, type: 3}
-  m_Name: Question_3
+  m_Name: Question_14
   m_EditorClassIdentifier: 
-  question: What is the name of the Pirate themed area of the island?
+  question: How many lives is a red Balloon worth?
   answerArray:
-  - Gangway Garbage
-  - Gangland Galleon
-  - Gangplank Galleon
-  correctIndex: 2
+  - 2 Lives
+  - 1 Life
+  - 5 Lives
+  correctIndex: 1
