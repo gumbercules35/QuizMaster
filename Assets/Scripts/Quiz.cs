@@ -16,7 +16,7 @@ public class Quiz : MonoBehaviour
     void Start()
     {
         DisplayQuestion();
-        ToggleButtonState(true);
+       
     }
 
 
@@ -48,11 +48,29 @@ public class Quiz : MonoBehaviour
         } 
     }
 
+    private void GetNextQuestion()
+    {
+        ToggleButtonState(true);
+        SetDefaultButtonSprite();
+        DisplayQuestion();
+
+    }
+
     private void ToggleButtonState (bool state){
-        foreach (var answerButton in answerButtons)
+        Button button;
+        foreach (GameObject answerButton in answerButtons)
         {
-            Button button = answerButton.GetComponent<Button>();
+            button = answerButton.GetComponent<Button>();
             button.interactable = state;
+        }
+    }
+    
+    private void SetDefaultButtonSprite (){
+        Image buttonImage;
+        foreach (GameObject answerButton in answerButtons)
+        {
+            buttonImage = answerButton.GetComponent<Image>();
+            buttonImage.sprite = defaultAnswerSprite;
         }
     }
 
