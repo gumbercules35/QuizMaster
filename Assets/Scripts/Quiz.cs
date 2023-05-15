@@ -15,17 +15,15 @@ public class Quiz : MonoBehaviour
    [SerializeField] private Sprite correctAnswerSprite;
     void Start()
     {
-        questionText.text = question.GetQuestion();
-
-        for (int i = 0; i < answerButtons.Length; i++)
-        {
-        TextMeshProUGUI buttonText = answerButtons[i].GetComponentInChildren<TextMeshProUGUI>();
-        buttonText.text = question.GetAnswer(i);            
-        }
+        DisplayQuestion();
+        ToggleButtonState(true);
     }
+
+
 
     public void OnAnswerSelected(int index)
     {   
+        ToggleButtonState(false);
         Image buttonImage;
         if (index == question.GetCorrectIndex()){
             questionText.text = "Correct!";
@@ -37,6 +35,24 @@ public class Quiz : MonoBehaviour
             questionText.text = "Incorrect! The Correct Answer Was:\n" + correctAnswer;
             buttonImage = answerButtons[correctIndex].GetComponent<Image>();
             buttonImage.sprite = correctAnswerSprite;
+        }
+    }
+
+    private void DisplayQuestion(){
+        questionText.text = question.GetQuestion();
+
+        for (int i = 0; i < answerButtons.Length; i++)
+        {
+        TextMeshProUGUI buttonText = answerButtons[i].GetComponentInChildren<TextMeshProUGUI>();
+        buttonText.text = question.GetAnswer(i);            
+        } 
+    }
+
+    private void ToggleButtonState (bool state){
+        foreach (var answerButton in answerButtons)
+        {
+            Button button = answerButton.GetComponent<Button>();
+            button.interactable = state;
         }
     }
 
