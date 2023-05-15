@@ -398,8 +398,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2145474211ce24d923d1695f7ccc05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToAnswer: 30
-  timeToWait: 10
+  timeToAnswer: 5
+  timeToWait: 1
+  fillFraction: 0
+  loadNextQuestion: 0
 --- !u!4 &388048725
 Transform:
   m_ObjectHideFlags: 0
@@ -940,6 +942,7 @@ MonoBehaviour:
   - {fileID: 1016747738}
   defaultAnswerSprite: {fileID: 21300000, guid: ae38ee0e63b70bd458a2aa8585b2e692, type: 3}
   correctAnswerSprite: {fileID: 21300000, guid: 33ef3661692e0fc40b2669ce4eda1bbc, type: 3}
+  timerImage: {fileID: 1572887683}
 --- !u!1 &1062714120
 GameObject:
   m_ObjectHideFlags: 0

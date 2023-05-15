@@ -6,25 +6,59 @@ using UnityEngine.UI;
 
 public class Quiz : MonoBehaviour
 {
+    [Header("Questions")]
     [SerializeField] private TextMeshProUGUI questionText;
    [SerializeField] private QuestionSO question;
-   [SerializeField] private GameObject[] answerButtons;
 
+    [Header("Answers")]
+   [SerializeField] private GameObject[] answerButtons;
    private int correctAnswerIndex;
+   private bool hasAnswered = false;
+
+   [Header("Button Sprites")]
    [SerializeField] private Sprite defaultAnswerSprite;
    [SerializeField] private Sprite correctAnswerSprite;
+
+   [Header("Timer")]
+   [SerializeField] private Image timerImage;
+   private Timer timer;
     void Start()
     {
+        timer = FindObjectOfType<Timer>();
         DisplayQuestion();
        
+    }
+
+    void Update()
+    {
+        timerImage.fillAmount = timer.fillFraction;
+        if(timer.loadNextQuestion){
+            hasAnswered = false;
+            GetNextQuestion();
+            timer.loadNextQuestion = false;
+        } 
+        else if (!hasAnswered && !timer.GetAnsweringState())
+        {
+            DisplayAnswer(-1);
+            ToggleButtonState(false);
+        }
     }
 
 
 
     public void OnAnswerSelected(int index)
     {   
+        hasAnswered = true;
+        DisplayAnswer(index);
+        timer.AnswerSelected();
         ToggleButtonState(false);
+        
+    }
+
+    private void DisplayAnswer(int index)
+    {
         Image buttonImage;
+
         if (index == question.GetCorrectIndex()){
             questionText.text = "Correct!";
             buttonImage = answerButtons[index].GetComponent<Image>();
