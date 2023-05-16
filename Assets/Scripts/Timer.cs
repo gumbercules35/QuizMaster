@@ -8,6 +8,8 @@ public class Timer : MonoBehaviour
     [SerializeField] private float timeToWait = 10f;
     public float fillFraction;
     private bool isAnswering = false;
+
+   
     public bool loadNextQuestion = false;
     private float timerValue;
    
@@ -36,7 +38,7 @@ public class Timer : MonoBehaviour
             }
         } else {
             if(timerValue <= 0)
-            {
+            {   
                 isAnswering = true;
                 timerValue = timeToAnswer;
                 loadNextQuestion = true;

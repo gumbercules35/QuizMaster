@@ -31,11 +31,18 @@ public class Quiz : MonoBehaviour
    [Header("Progress Bar")]
    [SerializeField] private Slider progressBar;
 
+   [Header("Audio")]
+   private AudioHandler audioHandler;
+
    public bool isComplete = false;
-    void Start()
-    {
+   private void Awake()
+   {
         timer = FindObjectOfType<Timer>();
        scoreKeeper = FindObjectOfType<ScoreKeeper>();
+       audioHandler = FindObjectOfType<AudioHandler>();
+   }
+    void Start()
+    {
        scoreKeeper.SetListCount(questionsList.Count);
        scoreText.text = "Score: " + scoreKeeper.GetCorrectAnswers() + "/" + scoreKeeper.GetListCount();
        progressBar.maxValue = questionsList.Count;
@@ -47,15 +54,23 @@ public class Quiz : MonoBehaviour
     {
         timerImage.fillAmount = timer.fillFraction;
         if(timer.loadNextQuestion){
+            if(progressBar.value == progressBar.maxValue){
+            isComplete = true;
+            return;
+        }
             hasAnswered = false;
             GetNextQuestion();
             timer.loadNextQuestion = false;
         } 
         else if (!hasAnswered && !timer.GetAnsweringState())
         {
+
             DisplayAnswer(-1);
             ToggleButtonState(false);
+            hasAnswered = true;
+            
         }
+        
     }
 
 
@@ -67,9 +82,7 @@ public class Quiz : MonoBehaviour
         timer.AnswerSelected();
         ToggleButtonState(false);
         scoreText.text = "Score: " + scoreKeeper.GetCorrectAnswers() + "/" + scoreKeeper.GetListCount();
-        if(progressBar.value == progressBar.maxValue){
-            isComplete = true;
-        }
+        
         
     }
 
@@ -78,21 +91,30 @@ public class Quiz : MonoBehaviour
         Image buttonImage;
         int correctIndex = currentQuestion.GetCorrectIndex();
 
+        for (int i = 0; i < answerButtons.Length; i++){
+                if ( i != correctIndex){
+                buttonImage = answerButtons[i].GetComponent<Image>();
+                buttonImage.color = Color.red;
+                }
+                else {
+                  buttonImage = answerButtons[i].GetComponent<Image>();
+                buttonImage.color = Color.green;  
+                }
+            }
+
         if (index == correctIndex){
+            audioHandler.PlaySounds(true);
             questionText.text = "Correct!";
             buttonImage = answerButtons[index].GetComponent<Image>();
             buttonImage.sprite = correctAnswerSprite;
             scoreKeeper.IncrementCorrectAnswers();            
         } else {
-            if (index != -1)
-            {
-                buttonImage = answerButtons[index].GetComponent<Image>();
-                buttonImage.color = Color.red;
-            }
+            audioHandler.PlaySounds(false);
             string correctAnswer = currentQuestion.GetAnswer(correctIndex);
             questionText.text = "Incorrect! The Correct Answer Was:\n" + correctAnswer;
             buttonImage = answerButtons[correctIndex].GetComponent<Image>();
-            buttonImage.sprite = correctAnswerSprite;           
+            buttonImage.sprite = correctAnswerSprite; 
+                    
         }
     }
 
