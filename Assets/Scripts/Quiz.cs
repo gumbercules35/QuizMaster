@@ -27,12 +27,19 @@ public class Quiz : MonoBehaviour
    [Header("Scoring")]
    [SerializeField] TextMeshProUGUI scoreText;
    ScoreKeeper scoreKeeper;
+
+   [Header("Progress Bar")]
+   [SerializeField] private Slider progressBar;
+
+   public bool isComplete = false;
     void Start()
     {
         timer = FindObjectOfType<Timer>();
        scoreKeeper = FindObjectOfType<ScoreKeeper>();
        scoreKeeper.SetListCount(questionsList.Count);
        scoreText.text = "Score: " + scoreKeeper.GetCorrectAnswers() + "/" + scoreKeeper.GetListCount();
+       progressBar.maxValue = questionsList.Count;
+       progressBar.value = 0;
        
     }
 
@@ -60,20 +67,28 @@ public class Quiz : MonoBehaviour
         timer.AnswerSelected();
         ToggleButtonState(false);
         scoreText.text = "Score: " + scoreKeeper.GetCorrectAnswers() + "/" + scoreKeeper.GetListCount();
+        if(progressBar.value == progressBar.maxValue){
+            isComplete = true;
+        }
         
     }
 
     private void DisplayAnswer(int index)
     {
         Image buttonImage;
+        int correctIndex = currentQuestion.GetCorrectIndex();
 
-        if (index == currentQuestion.GetCorrectIndex()){
+        if (index == correctIndex){
             questionText.text = "Correct!";
             buttonImage = answerButtons[index].GetComponent<Image>();
             buttonImage.sprite = correctAnswerSprite;
             scoreKeeper.IncrementCorrectAnswers();            
         } else {
-            int correctIndex = currentQuestion.GetCorrectIndex();
+            if (index != -1)
+            {
+                buttonImage = answerButtons[index].GetComponent<Image>();
+                buttonImage.color = Color.red;
+            }
             string correctAnswer = currentQuestion.GetAnswer(correctIndex);
             questionText.text = "Incorrect! The Correct Answer Was:\n" + correctAnswer;
             buttonImage = answerButtons[correctIndex].GetComponent<Image>();
@@ -100,6 +115,7 @@ public class Quiz : MonoBehaviour
             GetRandomQuestion();
             DisplayQuestion();
             scoreKeeper.IncrementQuestionsSeen();
+            progressBar.value ++;
         }
 
     }
@@ -130,6 +146,7 @@ public class Quiz : MonoBehaviour
         {
             buttonImage = answerButton.GetComponent<Image>();
             buttonImage.sprite = defaultAnswerSprite;
+            buttonImage.color = Color.white;
         }
     }
 
